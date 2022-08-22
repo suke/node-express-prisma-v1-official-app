@@ -1,0 +1,37 @@
+version: '3'
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 8081:3000
+    depends_on:
+      - postgres
+  postgres:
+    image: postgres:13.2-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - real_world_example_postgres:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    hostname: postgres
+    user: root
+  pgadmin4:
+    image: dpage/pgadmin4:6.12
+    ports:
+      - 8000:80
+    volumes:
+      - real_world_example_postgres_pgadmin4:/var/lib/pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: root
+    hostname: pgadmin4
+    depends_on:
+      - postgres
+
+volumes:
+  real_world_example_postgres:
+  real_world_example_postgres_pgadmin4:
